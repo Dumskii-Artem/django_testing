@@ -3,7 +3,6 @@ from datetime import datetime, timedelta
 
 import pytest
 from django.test.client import Client
-from django.urls import reverse
 from django.utils import timezone
 
 from news.models import News, Comment

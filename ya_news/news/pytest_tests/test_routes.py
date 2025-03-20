@@ -32,7 +32,11 @@ def test_detail_page_availability_for_anonymous_user(client, news):
     'name',
     ('news:delete', 'news:edit')
 )
-def test_availability_for_comment_edit_and_delete(name, author_client, comment):
+def test_availability_for_comment_edit_and_delete(
+    name,
+    author_client,
+    comment
+):
     url = reverse(name, args=(comment.id,))
     response = author_client.get(url)
     assert response.status_code == HTTPStatus.OK
@@ -60,5 +64,3 @@ def test_availability_for_comment_edit_and_delete_not_author(
     url = reverse(name, args=(comment.id,))
     response = not_author_client.get(url)
     assert response.status_code == HTTPStatus.NOT_FOUND
-
-

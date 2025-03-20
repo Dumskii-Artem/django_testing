@@ -1,7 +1,5 @@
 # notes/tests/test_logic.py
 
-from django.conf import settings
-from django.urls import reverse
 from pytils.translit import slugify
 from http import HTTPStatus
 
@@ -65,7 +63,7 @@ class TestLogic(FixtureCase):
     def test_auth_cant_edit_note(self):
         response = self.auth_client.post(EDIT_URL, data=self.note_data)
         self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
-        # данные не сохранились      
+        # данные не сохранились
         new_note = Note.objects.get(slug=NOTE_SLUG)
         self.assertEqual(new_note.text, self.note.text)
         self.assertEqual(new_note.title, self.note.title)

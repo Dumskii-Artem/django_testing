@@ -1,9 +1,6 @@
 # notes/tests/test_routes.py
 from http import HTTPStatus
 
-from django.urls import reverse
-
-
 from notes.tests.testing_utils import (
     FixtureCase,
 

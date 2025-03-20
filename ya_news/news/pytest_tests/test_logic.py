@@ -21,6 +21,7 @@ BAD_COMMENT_DATA = {
     'text': BAD_COMMENT_TEXT
 }
 
+
 def test_anonymous_user_cant_create_comment(client, news):
     url = reverse('news:detail', args=(news.id,))
     client.post(url, data=COMMENT_DATA)

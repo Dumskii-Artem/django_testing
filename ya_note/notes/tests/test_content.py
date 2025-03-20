@@ -1,7 +1,5 @@
 # notes/tests/test_content.py
 
-from django.conf import settings
-
 from notes.tests.testing_utils import (
     FixtureCase,
     LIST_URL,
