@@ -1,7 +1,6 @@
 # notes/tests/test_content.py
 
 from django.conf import settings
-from django.urls import reverse
 
 from notes.tests.testing_utils import (
     FixtureCase,
