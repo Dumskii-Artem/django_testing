@@ -1,10 +1,8 @@
 import pytest
-
 from django.test.client import Client
 
-from yanews.settings import NEWS_COUNT_ON_HOME_PAGE
 from news.forms import CommentForm
-
+from yanews.settings import NEWS_COUNT_ON_HOME_PAGE
 
 pytestmark = pytest.mark.django_db
 client = Client()
@@ -18,8 +16,7 @@ def test_news_count_on_page(news_sample, home_url):
 def test_news_sorting(news_sample, client, home_url):
     all_dates = [news.date
                  for news in client.get(home_url).context['object_list']]
-    sorted_dates = sorted(all_dates, reverse=True)
-    assert all_dates == sorted_dates
+    assert all_dates == sorted(all_dates, reverse=True)
 
 
 def test_comments_sorting(comments_sample, client, news, detail_url):
@@ -36,6 +33,7 @@ def test_anonymous_client_has_no_form(client, news, detail_url):
 
 
 def test_authorized_client_has_form(not_author_client, news, detail_url):
-    response = not_author_client.get(detail_url)
-    assert 'form' in response.context
-    assert isinstance(response.context['form'], CommentForm)
+    assert isinstance(
+        not_author_client.get(detail_url).context.get('form'), 
+        CommentForm
+    )

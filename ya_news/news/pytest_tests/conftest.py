@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
-import pytest
 
+import pytest
 from django.test.client import Client
 from django.urls import reverse
 from django.utils import timezone
@@ -20,6 +20,11 @@ def news(db):
 @pytest.fixture
 def author(django_user_model):
     return django_user_model.objects.create(username='Автор')
+
+
+@pytest.fixture
+def client():
+    return Client()
 
 
 @pytest.fixture
@@ -115,4 +120,10 @@ def redirect_edit_url(login_url, edit_url):
 
 @pytest.fixture
 def redirect_delete_url(login_url, delete_url):
-    return f"{login_url}?next={delete_url}"
+    return f'{login_url}?next={delete_url}'
+
+
+@pytest.fixture
+def redirect_detail_comments(detail_url):
+    return detail_url + '#comments'
+

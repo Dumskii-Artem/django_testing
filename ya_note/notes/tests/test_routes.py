@@ -30,17 +30,21 @@ class TestRoutes(FixtureCase):
             [LOGOUT_URL, self.client, HTTPStatus.OK],
             [SIGNUP_URL, self.client, HTTPStatus.OK],
 
-            [LIST_URL, self.auth_client, HTTPStatus.OK],
-            [ADD_URL, self.auth_client, HTTPStatus.OK],
-            [SUCCESS_URL, self.auth_client, HTTPStatus.OK],
+            [LIST_URL, self.not_author_client, HTTPStatus.OK],
+            [ADD_URL, self.not_author_client, HTTPStatus.OK],
+            [SUCCESS_URL, self.not_author_client, HTTPStatus.OK],
 
             [DETAIL_URL, self.author_client, HTTPStatus.OK],
             [EDIT_URL, self.author_client, HTTPStatus.OK],
             [DELETE_URL, self.author_client, HTTPStatus.OK],
 
-            [DETAIL_URL, self.auth_client, HTTPStatus.NOT_FOUND],
-            [EDIT_URL, self.auth_client, HTTPStatus.NOT_FOUND],
-            [DELETE_URL, self.auth_client, HTTPStatus.NOT_FOUND],
+            [DETAIL_URL, self.not_author_client, HTTPStatus.NOT_FOUND],
+            [EDIT_URL, self.not_author_client, HTTPStatus.NOT_FOUND],
+            [DELETE_URL, self.not_author_client, HTTPStatus.NOT_FOUND],
+
+            [DETAIL_URL, self.client, HTTPStatus.FOUND],
+            [EDIT_URL, self.client, HTTPStatus.FOUND],
+            [DELETE_URL, self.client, HTTPStatus.FOUND],
         )
         for url, client, status in cases:
             with self.subTest(url=url, status=status):

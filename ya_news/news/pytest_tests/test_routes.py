@@ -1,10 +1,8 @@
-# test_routes.py
-import pytest
-# from pytest import lazy_fixture
-from pytest_django.asserts import assertRedirects
 from http import HTTPStatus
 
-from django.test.client import Client
+import pytest
+from pytest_django.asserts import assertRedirects
+
 
 HOME_URL = pytest.lazy_fixture('home_url')
 LOGIN_URL = pytest.lazy_fixture('login_url')
@@ -17,30 +15,32 @@ EDIT_URL = pytest.lazy_fixture('edit_url')
 REDIRECT_DELETE_URL = pytest.lazy_fixture('redirect_delete_url')
 REDIRECT_EDIT_URL = pytest.lazy_fixture('redirect_edit_url')
 
+CLIENT = pytest.lazy_fixture('client')
 AUTHOR_CLIENT = pytest.lazy_fixture('author_client')
 NOT_AUTHOR_CLIENT = pytest.lazy_fixture('not_author_client')
 
 pytestmark = pytest.mark.django_db
-client = Client()
 
 
 @pytest.mark.parametrize(
-    'url, client, status',
+    'url, client_fixure, status',
     (
-        (HOME_URL, client, HTTPStatus.OK),
+        (HOME_URL, CLIENT, HTTPStatus.OK),
 
-        (LOGIN_URL, client, HTTPStatus.OK),
-        (LOGOUT_URL, client, HTTPStatus.OK),
-        (SIGNUP_URL, client, HTTPStatus.OK),
-        (DETAIL_URL, client, HTTPStatus.OK),
+        (LOGIN_URL, CLIENT, HTTPStatus.OK),
+        (LOGOUT_URL, CLIENT, HTTPStatus.OK),
+        (SIGNUP_URL, CLIENT, HTTPStatus.OK),
+        (DETAIL_URL, CLIENT, HTTPStatus.OK),
         (DELETE_URL, AUTHOR_CLIENT, HTTPStatus.OK),
-        (EDIT_URL, AUTHOR_CLIENT, HTTPStatus.OK),
         (DELETE_URL, NOT_AUTHOR_CLIENT, HTTPStatus.NOT_FOUND),
+        (DELETE_URL, CLIENT, HTTPStatus.FOUND),
+        (EDIT_URL, AUTHOR_CLIENT, HTTPStatus.OK),
         (EDIT_URL, NOT_AUTHOR_CLIENT, HTTPStatus.NOT_FOUND),
+        (EDIT_URL, CLIENT, HTTPStatus.FOUND),
     )
 )
-def test_pages_availability_for_anonymous_user(client, url, status):
-    assert client.get(url).status_code == status
+def test_pages_availability_for_anonymous_user(client_fixure, url, status):
+    assert client_fixure.get(url).status_code == status
 
 
 @pytest.mark.parametrize(

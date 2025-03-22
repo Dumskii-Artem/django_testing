@@ -35,9 +35,9 @@ class FixtureCase(TestCase):
     @classmethod
     def setUpTestData(cls):
 
-        cls.auth_user = User.objects.create(username='Авторизированный')
-        cls.auth_client = Client()
-        cls.auth_client.force_login(cls.auth_user)
+        cls.not_author_user = User.objects.create(username='Авторизированный')
+        cls.not_author_client = Client()
+        cls.not_author_client.force_login(cls.not_author_user)
 
         cls.author_user = User.objects.create(username='Автор')
         cls.author_client = Client()
@@ -55,3 +55,10 @@ class FixtureCase(TestCase):
             'text': 'Второй текст',
             'slug': 'second-slug'
         }
+
+        cls.form_data_empty_slug = {
+            'title': 'Третий заголовок',
+            'text': 'Третий текст',
+            'slug': ''
+        }
+

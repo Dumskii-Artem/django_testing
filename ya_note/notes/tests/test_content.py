@@ -20,16 +20,14 @@ class TestContent(FixtureCase):
     def test_note_not_in_list(self):
         self.assertNotIn(
             self.note,
-            self.auth_client.get(LIST_URL).context['object_list']
+            self.not_author_client.get(LIST_URL).context['object_list']
         )
 
     def test_pages_contains_form(self):
         urls = (ADD_URL, EDIT_URL)
         for url in urls:
             with self.subTest(url=url):
-                response = self.author_client.get(url)
-                self.assertIn('form', response.context)
                 self.assertIsInstance(
-                    response.context.get('form'),
+                    self.author_client.get(url).context.get('form'),
                     NoteForm
                 )
