@@ -26,7 +26,8 @@ def test_comments_sorting(comments_sample, client, news, detail_url):
     response = client.get(detail_url)
     assert 'news' in response.context
     all_timestamps = [comment.created
-                      for comment in response.context['news'].comment_set.all()]
+                      for comment 
+                      in response.context['news'].comment_set.all()]
     assert all_timestamps == sorted(all_timestamps)
 
 

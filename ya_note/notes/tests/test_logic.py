@@ -36,7 +36,7 @@ class TestLogic(FixtureCase):
         for form_slug, result_slug in cases:
             with self.subTest(form_slug=form_slug):
                 self.form_data['slug'] = form_slug
-                notes_before = set(Note.objects.all())        
+                notes_before = set(Note.objects.all())
                 self.auth_client.post(ADD_URL, data=self.form_data)
                 created_notes = set(Note.objects.all()) - notes_before
                 self.assertEqual(len(created_notes), 1)

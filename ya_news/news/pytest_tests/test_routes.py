@@ -4,7 +4,6 @@ import pytest
 from pytest_django.asserts import assertRedirects
 from http import HTTPStatus
 
-from django.urls import reverse
 from django.test.client import Client
 
 HOME_URL = pytest.lazy_fixture('home_url')
