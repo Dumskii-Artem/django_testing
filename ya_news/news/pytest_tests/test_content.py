@@ -34,6 +34,6 @@ def test_anonymous_client_has_no_form(client, news, detail_url):
 
 def test_authorized_client_has_form(not_author_client, news, detail_url):
     assert isinstance(
-        not_author_client.get(detail_url).context.get('form'), 
+        not_author_client.get(detail_url).context.get('form'),
         CommentForm
     )

@@ -61,4 +61,3 @@ class FixtureCase(TestCase):
             'text': 'Третий текст',
             'slug': ''
         }
-

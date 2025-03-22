@@ -126,4 +126,3 @@ def redirect_delete_url(login_url, delete_url):
 @pytest.fixture
 def redirect_detail_comments(detail_url):
     return detail_url + '#comments'
-
