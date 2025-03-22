@@ -1,4 +1,3 @@
-# notes/tests/test_routes.py
 from http import HTTPStatus
 
 from notes.tests.testing_utils import (
@@ -13,51 +12,52 @@ from notes.tests.testing_utils import (
     SUCCESS_URL,
     DETAIL_URL,
     EDIT_URL,
-    DELETE_URL
+    DELETE_URL,
+    REDIRECT_ADD_URL,
+    REDIRECT_SUCCESS_URL,
+    REDIRECT_LIST_URL,
+    REDIRECT_EDIT_URL,
+    REDIRECT_DELETE_URL,
+    REDIRECT_DETAIL_URL
 )
 
 
 class TestRoutes(FixtureCase):
-
     def test_pages_availability(self):
-        urls = (HOME_URL, LOGIN_URL, LOGOUT_URL, SIGNUP_URL)
-        for url in urls:
-            with self.subTest(url=url):
-                response = self.client.get(url)
-                self.assertEqual(response.status_code, HTTPStatus.OK)
+        cases = (
+            [HOME_URL, self.client, HTTPStatus.OK],
+            [LOGIN_URL, self.client, HTTPStatus.OK],
+            [LOGOUT_URL, self.client, HTTPStatus.OK],
+            [SIGNUP_URL, self.client, HTTPStatus.OK],
 
-    def test_pages_availability_for_auth_user(self):
-        urls = (LIST_URL, ADD_URL, SUCCESS_URL)
-        for url in urls:
-            with self.subTest(url=url):
-                response = self.auth_client.get(url)
-                self.assertEqual(response.status_code, HTTPStatus.OK)
+            [LIST_URL, self.auth_client, HTTPStatus.OK],
+            [ADD_URL, self.auth_client, HTTPStatus.OK],
+            [SUCCESS_URL, self.auth_client, HTTPStatus.OK],
 
-    def test_pages_availability_for_author(self):
-        urls = (DETAIL_URL, EDIT_URL, DELETE_URL)
-        for url in urls:
-            with self.subTest(url=url):
-                response = self.author_client.get(url)
-                self.assertEqual(response.status_code, HTTPStatus.OK)
+            [DETAIL_URL, self.author_client, HTTPStatus.OK],
+            [EDIT_URL, self.author_client, HTTPStatus.OK],
+            [DELETE_URL, self.author_client, HTTPStatus.OK],
 
-    def test_pages_availability_for_not_author(self):
-        urls = (DETAIL_URL, EDIT_URL, DELETE_URL)
-        for url in urls:
-            with self.subTest(url=url):
-                response = self.auth_client.get(url)
-                self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
+            [DETAIL_URL, self.auth_client, HTTPStatus.NOT_FOUND],
+            [EDIT_URL, self.auth_client, HTTPStatus.NOT_FOUND],
+            [DELETE_URL, self.auth_client, HTTPStatus.NOT_FOUND],
+        )
+        for url, client, status in cases:
+            with self.subTest(url=url, status=status):
+                self.assertEqual(client.get(url).status_code, status)
 
     def test_redirect_for_anonymous_client(self):
-        urls = (
-            DETAIL_URL,
-            EDIT_URL,
-            DELETE_URL,
-            ADD_URL,
-            SUCCESS_URL,
-            LIST_URL,
+        cases = (
+            [ADD_URL, REDIRECT_ADD_URL],
+            [DETAIL_URL, REDIRECT_DETAIL_URL],
+            [DELETE_URL, REDIRECT_DELETE_URL],
+            [EDIT_URL, REDIRECT_EDIT_URL],
+            [LIST_URL, REDIRECT_LIST_URL],
+            [SUCCESS_URL, REDIRECT_SUCCESS_URL]
         )
-        for url in urls:
+        for url, redirect_url in cases:
             with self.subTest(url=url):
-                redirect_url = f'{LOGIN_URL}?next={url}'
-                response = self.client.get(url)
-                self.assertRedirects(response, redirect_url)
+                self.assertRedirects(
+                    self.client.get(url),
+                    redirect_url
+                )

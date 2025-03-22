@@ -1,5 +1,4 @@
-# notes/tests/test_content.py
-
+from notes.forms import NoteForm
 from notes.tests.testing_utils import (
     FixtureCase,
     LIST_URL,
@@ -10,14 +9,19 @@ from notes.tests.testing_utils import (
 
 class TestContent(FixtureCase):
     def test_note_in_list(self):
-        response = self.author_client.get(LIST_URL)
-        object_list = response.context['object_list']
-        self.assertIn(self.note, object_list)
+        notes = self.author_client.get(LIST_URL).context['object_list']
+        self.assertIn(self.note, notes)
+        note = notes.get(pk=self.note.id)
+        self.assertEqual(note.title, self.note.title)
+        self.assertEqual(note.text, self.note.text)
+        self.assertEqual(note.slug, self.note.slug)
+        self.assertEqual(note.author, self.note.author)
 
     def test_note_not_in_list(self):
-        response = self.auth_client.get(LIST_URL)
-        object_list = response.context['object_list']
-        self.assertNotIn(self.note, object_list)
+        self.assertNotIn(
+            self.note,
+            self.auth_client.get(LIST_URL).context['object_list']
+        )
 
     def test_pages_contains_form(self):
         urls = (ADD_URL, EDIT_URL)
@@ -25,3 +29,7 @@ class TestContent(FixtureCase):
             with self.subTest(url=url):
                 response = self.author_client.get(url)
                 self.assertIn('form', response.context)
+                self.assertIsInstance(
+                    response.context.get('form'),
+                    NoteForm
+                )

@@ -1,5 +1,3 @@
-# notes/tests/testing_utils.py
-
 from django.contrib.auth import get_user_model
 from django.test import TestCase, Client
 from django.urls import reverse
@@ -11,18 +9,25 @@ User = get_user_model()
 
 NOTE_SLUG = 'note_slug'
 
+ADD_URL = reverse('notes:add')
 HOME_URL = reverse('notes:home')
 LIST_URL = reverse('notes:list')
-ADD_URL = reverse('notes:add')
 SUCCESS_URL = reverse('notes:success')
 
 LOGIN_URL = reverse('users:login')
 LOGOUT_URL = reverse('users:logout')
 SIGNUP_URL = reverse('users:signup')
 
-DETAIL_URL = reverse('notes:detail', args=(NOTE_SLUG,))
 EDIT_URL = reverse('notes:edit', args=(NOTE_SLUG,))
+DETAIL_URL = reverse('notes:detail', args=(NOTE_SLUG,))
 DELETE_URL = reverse('notes:delete', args=(NOTE_SLUG,))
+
+REDIRECT_ADD_URL = f'{LOGIN_URL}?next={ADD_URL}'
+REDIRECT_DELETE_URL = f'{LOGIN_URL}?next={DELETE_URL}'
+REDIRECT_DETAIL_URL = f'{LOGIN_URL}?next={DETAIL_URL}'
+REDIRECT_EDIT_URL = f'{LOGIN_URL}?next={EDIT_URL}'
+REDIRECT_LIST_URL = f'{LOGIN_URL}?next={LIST_URL}'
+REDIRECT_SUCCESS_URL = f'{LOGIN_URL}?next={SUCCESS_URL}'
 
 
 class FixtureCase(TestCase):
@@ -45,7 +50,7 @@ class FixtureCase(TestCase):
             author=cls.author_user
         )
 
-        cls.note_data = {
+        cls.form_data = {
             'title': 'Второй заголовок',
             'text': 'Второй текст',
             'slug': 'second-slug'
